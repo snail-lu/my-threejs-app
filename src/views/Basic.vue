@@ -34,6 +34,7 @@ function animate() {
 	renderer.render( scene, camera );
 }
 
+// 在mounted生命周期中挂载渲染器元素，确保此时容器元素已经存在
 onMounted(() => {
   const basicBox = document.getElementById('basic');
   basicBox.appendChild( renderer.domElement );

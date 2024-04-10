@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li><router-link to="/basic">Basic</router-link></li>
+    <li><router-link to="/basic">基础入门</router-link></li>
   </ul>
 </template>
 
