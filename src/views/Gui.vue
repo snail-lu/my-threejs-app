@@ -137,6 +137,16 @@ function initGUI() {
   folder.add(cube.position, 'x').min(-5).max(5).step(1).name('x轴')
   folder.add(cube.position, 'y').min(-5).max(5).step(1).name('y轴')
   folder.add(cube.position, 'z').min(-5).max(5).step(1).name('z轴')
+
+  // 样式控制
+  const styleFolder = gui.addFolder('样式控制')
+  styleFolder.add(cube.material, 'wireframe').name('线框模式')
+  const colorParams = {
+    cubeColor: 0xff0000
+  }
+  styleFolder.addColor(colorParams, 'cubeColor').name('颜色设置').onFinishChange(value => {
+    cube.material.color.set(value)
+  })
 }
 
 // 窗口变化
