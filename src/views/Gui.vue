@@ -118,7 +118,7 @@ function animate() {
 // lil-gui使用
 let eventObj = {
   FullScreen: function () {
-    document.body.requestFullscreen()
+    document.documentElement.requestFullscreen()
   },
   ExitFullScreen: function () {
     document.exitFullscreen()
@@ -167,14 +167,13 @@ function threeStart() {
   initOrbitControls();
   renderer.clear();
   renderer.render(scene, camera);
-  animate()
-  initGUI()
+  animate();
+  initGUI();
 }
 
 onMounted(() => {
   threeStart()
-
-  window.onResize = onWindowResize;
+  window.addEventListener('resize', onWindowResize)
 })
 </script>
 
