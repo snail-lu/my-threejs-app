@@ -3,6 +3,7 @@ import * as VueRouter from 'vue-router'
 const routes = [
     { path: '/', component: () => import('../views/Home.vue') },
     { path: '/basic', component: () => import('../views/Basic.vue') },
+    { path: '/orbit-controls', component: () => import('../views/OrbitControls.vue') },
     { path: '/stats', component: () => import('../views/Stats.vue') },
     { path: '/light', component: () => import('../views/Light.vue') },
     { path: '/lil-gui', component: () => import('../views/Gui.vue') },
