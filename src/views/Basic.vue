@@ -8,6 +8,7 @@ import { onMounted } from 'vue';
 
 // 场景
 const scene = new THREE.Scene();
+scene.background = new THREE.Color('#fff'); // 设置背景色
 
 // 相机
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );

@@ -6,16 +6,14 @@
 
 <script setup>
 import * as THREE from 'three';
-// three中已经包含Stats.js---帧数检测工具
-import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { onMounted } from 'vue';
-import computerTexture from '../assets/computer.jpg';
 
 // 场景
 let scene; 
 function initScene() {
   scene = new THREE.Scene();
+  scene.background = new THREE.Color('#fff')
 }
 
 // 相机
@@ -59,7 +57,7 @@ let controls;
 function initOrbitControls() {
   controls = new OrbitControls(camera, renderer.domElement)
   controls.update()
-  controls.enableRotate = false; // 启用旋转, 跟自动旋转不冲突，这里是对用户操作旋转的启用和禁用
+  controls.enableRotate = true; // 启用旋转, 跟自动旋转不冲突，这里是对用户操作旋转的启用和禁用
   controls.autoRotate = true; // 自动旋转
   controls.autoRotateSpeed = 10; // 旋转速度
   controls.enableDamping = true; // 启用阻尼效果
