@@ -1,14 +1,12 @@
 <template>
   <div class="light-example">
-    光源类型
     <div id="canvas-frame"></div>
   </div>
 </template>
 
 <script setup>
 import * as THREE from 'three';
-// three中已经包含Stats.js---帧数检测工具
-import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { onMounted } from 'vue';
 
 // 场景
@@ -54,14 +52,30 @@ function initThree() {
   canvasFrame.appendChild( renderer.domElement );
 }
 
-// 光线
+// 平行光源
 let light;
-function initLight() {
-  // 第二个参数是光源强度
+function initDirectionalLight() {
+  // 平行光源,光线照射不到的地方会显示黑色
   light = new THREE.DirectionalLight(0xFF0000, 1);
   // 位置不同，方向光作用于物体的面也不同，看到的物体各个面的颜色也不一样
   light.position.set(0, 0, 1);
   scene.add(light);
+}
+
+// 环境光源
+let ambientLight;
+function initAmbientLight() {
+  // 无需设置位置
+  ambientLight = new THREE.AmbientLight(0x333333);
+  scene.add(ambientLight);
+}
+
+// 点光源
+let pointLight;
+function initPointLight() {
+  pointLight = new THREE.PointLight(0xfffff);
+  pointLight.position.set(0, 1, 0); //点光源位置
+  scene.add(pointLight);
 }
 
 // 物体
@@ -75,47 +89,19 @@ function initObject() {
   scene.add( cube );
 }
 
-
-/**
- * Stats使用步骤
- * 1. 实例化 Stats
- * 2. 设置初始面板 stats.setMode(0) 。传入面板id（0: fps, 1: ms, 2: mb）
- * 3. 设置监视器的位置
- * 4. 将监视器添加到页面中
- * 5. 更新帧数
- */
-let stats;
-function initStats() {
-  // 1. 实例化 Stats
-  stats = new Stats()
-
-  // 2. 设置初始面板 stats.setMode(0) 。传入面板id（0: fps, 1: ms, 2: mb）
-  stats.setMode(0)
-
-  // 3. 设置监视器的位置
-  stats.domElement.style.position = 'absolute'
-  stats.domElement.style.left = '0px'
-  stats.domElement.style.top = '0px'
-
-  // 4. 将监视器添加到页面中
-  let canvasFrame = document.getElementById('canvas-frame')
-  canvasFrame.appendChild(stats.domElement)
+// 轨道控制器
+let controls;
+function initOrbitControls() {
+  controls = new OrbitControls(camera, renderer.domElement)
+  controls.update()
+  controls.enableDamping = true; // 启用阻尼效果
+  controls.dampingFactor = 0.1; // 阻尼值
 }
-
-// 坐标轴
-function initAxesHelper() {
-  const axesHelper = new THREE.AxesHelper( 10 );
-  scene.add( axesHelper );
-}
-
 
 // 动画渲染
 function animate() {
-  // 5. 更新帧数
-  stats.update()
+  controls.update();
 	requestAnimationFrame( animate );
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
 	renderer.render( scene, camera );
 }
 
@@ -123,13 +109,17 @@ function threeStart() {
   initScene();
   initThree();
   initCamera();
-  initLight();
+
+  // 光源设置，光线效果会互相叠加
+  initAmbientLight();
+  initDirectionalLight();
+  initPointLight();
+
   initObject();
-  initStats();
-  initAxesHelper();
   renderer.clear();
   renderer.render(scene, camera);
-  animate()
+  initOrbitControls();
+  animate();
 }
 
 onMounted(() => {
@@ -142,7 +132,7 @@ onMounted(() => {
   display: flex;
 }
 #canvas-frame {
-  width: 80vw;
+  width: 100vw;
   height: 100vh;
   position: relative;
   background-color: #EEEEEE;
