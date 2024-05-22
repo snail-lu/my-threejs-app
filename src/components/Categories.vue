@@ -6,6 +6,7 @@
     <li><router-link to="/light">光源</router-link></li>
     <li><router-link to="/lil-gui">lil-gui</router-link></li>
     <li><router-link to="/texture">纹理</router-link></li>
+    <li><router-link to="/geometry">几何体</router-link></li>
   </ul>
 </template>
 

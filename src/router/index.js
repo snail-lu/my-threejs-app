@@ -50,6 +50,13 @@ const routes = [
         title: '纹理贴图'
       }
     },
+    { 
+      path: '/geometry', 
+      component: () => import('../views/Geometry.vue'),
+      meta: {
+        title: '几何体'
+      }
+    },
   ]
 const router = VueRouter.createRouter({
   // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
