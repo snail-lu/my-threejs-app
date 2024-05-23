@@ -44,7 +44,10 @@ function initRender() {
   canvasFrame.appendChild( renderer.domElement );
 }
 
-// 利用BufferGeometry创建一个三角形平面
+/**
+ * 利用BufferGeometry创建一个三角形平面
+ * 
+ **/ 
 let trianglePlane;
 function initTrianglePlane() {
   const geometry = new THREE.BufferGeometry();
@@ -70,7 +73,10 @@ function initTrianglePlane() {
   scene.add(trianglePlane);
 }
 
-// 利用BufferGeometry创建一个正方形平面
+/**
+ * 利用BufferGeometry创建一个正方形平面
+ * 
+ */
 let squarePlane1;
 function initSquarePlane1() {
   const geometry = new THREE.BufferGeometry();
@@ -92,7 +98,10 @@ function initSquarePlane1() {
   scene.add(squarePlane1);
 }
 
-// 利用BufferGeometry及索引创建一个正方形平面
+/**
+ * 利用BufferGeometry及索引创建一个正方形平面
+ * 
+ */
 let squarePlane2;
 function initSquarePlane2() {
   const geometry = new THREE.BufferGeometry();
@@ -120,14 +129,74 @@ function initSquarePlane2() {
   scene.add(squarePlane2);
 }
 
-// 物体
+/**
+ * 利用BufferGeometry及索引创建一个正方形平面并设置不同的材质
+ * 
+ */
+let squarePlane3;
+function initSquarePlane3() {
+  const geometry = new THREE.BufferGeometry();
+  // 创建顶点数据，共4个顶点
+  const vertices = new Float32Array([
+    3.0, 0, 0, 5.0, 0, 0,  5.0, 2.0, 0,  3.0, 2.0, 0
+  ])
+  // 创建顶点属性, 3个数据为一个顶点
+  geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+  // 创建索引，从而达到公用顶点的作用，索引0、1、2对应的顶点构成一个面，索引2、3、0构成一个面
+  // 0对应点(0, 0, 0), 1对应点(2.0, 0, 0), 2对应点(2.0, 2.0, 0), 3对应点(0, 2.0, 0)
+  const indices = new Uint16Array([0, 1, 2, 2, 3, 0]);
+
+  // 设置索引
+  geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+
+  // 对geometry分组
+  // addGroup(startIndex, count, materialIndex)
+  // startIndex - 起始索引 
+  // count - 个数
+  // meterailIndex - 对应的材质索引
+  geometry.addGroup(0, 3, 0); // [0, 1, 2, 2, 3, 0] 从索引0开始数3个，对应材质索引为0的材质
+  geometry.addGroup(3, 3, 1); // [0, 1, 2, 2, 3, 0] 从索引3开始数3个，对应材质索引为1的材质
+
+  // 创建材质0
+  const material0 = new THREE.MeshBasicMaterial({ 
+    color: 0xff0000,
+    // wireframe: true
+    // side: THREE.DoubleSide
+  });
+  
+  // 创建材质1
+  const material1 = new THREE.MeshBasicMaterial({ 
+    color: 0x00ff00,
+    // wireframe: true
+    // side: THREE.DoubleSide
+  });
+  squarePlane3 = new THREE.Mesh(geometry, [material0, material1]);
+  scene.add(squarePlane3);
+
+  squarePlane3.position.x = -3;
+  squarePlane3.position.y = 3;
+}
+
+/**
+ * 利用BoxGeometry创建立方体并设置不同的材质
+ * 
+ */
 let cube;
 function initObject() {
   // 创建立方体并添加到场景中
   const geometry = new THREE.BoxGeometry(1, 1);
-  const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-  cube = new THREE.Mesh( geometry, material );
+  // BoxGeometry本身自带groups，所以不需要再addGroup，只需设置材质数组即可
+  const material0 = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+  const material1 = new THREE.MeshBasicMaterial( { color: 0x0ff000 } );
+  const material2 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  const material3 = new THREE.MeshBasicMaterial( { color: 0x000033 } );
+  const material4 = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+  const material5 = new THREE.MeshBasicMaterial( { color: 0x220000 } );
+  cube = new THREE.Mesh( geometry, [material0, material1, material2, material3, material4, material5] );
   scene.add( cube );
+  cube.position.x = 3;
+  cube.position.y = 3;
 }
 
 // 轨道控制器
@@ -163,6 +232,8 @@ function start() {
   initTrianglePlane();
   initSquarePlane1();
   initSquarePlane2();
+  initSquarePlane3();
+  initObject();
   renderer.clear();
   renderer.render(scene, camera);
   initOrbitControls();
